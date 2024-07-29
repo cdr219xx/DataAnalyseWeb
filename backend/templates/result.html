@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Statistics Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Statistics of Each Column</h1>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Statistic</th>
+                    {% for column in stats['Mean'].keys() %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat, values in stats.items() %}
+                <tr>
+                    <td>{{ stat }}</td>
+                    {% for value in values.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2 class="mt-5">Plots</h2>
+        <div class="btn-group" role="group" aria-label="Plot types">
+            <button type="button" class="btn btn-secondary" onclick="showPlots('boxplot')">Boxplot</button>
+            <button type="button" class="btn btn-secondary" onclick="showPlots('histogram')">Histogram</button>
+            <button type="button" class="btn btn-secondary" onclick="showPlots('scatter')">Scatterplot</button>
+        </div>
+        <div class="row mt-3">
+            {% for plot in plots['boxplot'] %}
+            <div class="col-md-4 plot-boxplot">
+                <img src="{{ url_for('static', filename=plot) }}" class="img-fluid" alt="Boxplot">
+            </div>
+            {% endfor %}
+            {% for plot in plots['histogram'] %}
+            <div class="col-md-4 plot-histogram" style="display:none">
+                <img src="{{ url_for('static', filename=plot) }}" class="img-fluid" alt="Histogram">
+            </div>
+            {% endfor %}
+            {% for plot in plots['scatter'] %}
+            <div class="col-md-4 plot-scatter" style="display:none">
+                <img src="{{ url_for('static', filename=plot) }}" class="img-fluid" alt="Scatterplot">
+            </div>
+            {% endfor %}
+        </div>
+        <a href="/" class="btn btn-primary mt-3">Upload Another File</a>
+    </div>
+    <script>
+        function showPlots(plotType) {
+            $('.plot-boxplot').hide();
+            $('.plot-histogram').hide();
+            $('.plot-scatter').hide();
+            $(`.plot-${plotType}`).show();
+        }
+        $(document).ready(function() {
+            showPlots('boxplot');
+        });
+    </script>
+</body>
+</html>
