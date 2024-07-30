@@ -10,12 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
+    - uses: actions/checkout@v4  # Aktualisierte Version
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4  # Aktualisierte Version
       with:
-        python-version: '3.11'  # Verwende die Python-Version, die dein Projekt benötigt
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
