@@ -10,9 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4  # Aktualisierte Version
+    - uses: actions/checkout@v4 # Aktualisierte Version
+
     - name: Set up Python
-      uses: actions/setup-python@v4  # Aktualisierte Version
+      uses: actions/setup-python@v4 # Aktualisierte Version
       with:
         python-version: '3.11'
 
@@ -25,5 +26,6 @@ jobs:
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
+        heroku auth:token
         heroku git:remote -a dataanalyseweb
         git push heroku master
