@@ -1,4 +1,4 @@
-name: Deploy to Heroku # kommentar um zu gucken ob sich was ändert
+name: Deploy to Heroku # kommentar um zu gucken ob sich was ändert (Teil2
 
 on:
   push:
@@ -26,6 +26,6 @@ jobs:
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
-        heroku auth:token
+        echo ${HEROKU_API_KEY} | docker login --username=_ --password-stdin registry.heroku.com
         heroku git:remote -a dataanalyseweb
         git push heroku master
