@@ -28,11 +28,22 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Verify Secrets with PowerShell
+        run: |
+          if ($env:HEROKU_API_KEY) { Write-Host "HEROKU_API_KEY is set" } else { Write-Error "HEROKU_API_KEY is not set" }
+          if ($env:HEROKU_EMAIL) { Write-Host "HEROKU_EMAIL is set" } else { Write-Error "HEROKU_EMAIL is not set" }
+          if ($env:SSH_PRIVATE_KEY) { Write-Host "SSH_PRIVATE_KEY is set" } else { Write-Error "SSH_PRIVATE_KEY is not set" }
+        shell: pwsh
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
         run: |
-          echo ${HEROKU_API_KEY} | docker login --username=${HEROKU_EMAIL} --password-stdin registry.heroku.com
+          echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=${{ secrets.HEROKU_EMAIL }} --password-stdin registry.heroku.com
           git remote add heroku https://git.heroku.com/dataanalyseweb.git
           git push heroku master
