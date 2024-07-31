@@ -23,6 +23,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+<<<<<<< HEAD
+=======
+    - name: Add SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+>>>>>>> c7a76d0 (Aktualisiere Workflow mit SSH-Schlüssel und API-Key)
     - name: Deploy to Heroku
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
