@@ -33,6 +33,9 @@ jobs:
           echo "machine git.heroku.com login ${{ secrets.HEROKU_EMAIL }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
           chmod 600 ~/.netrc
 
+      - name: Set Git pull strategy
+        run: git config --global pull.rebase false
+
       - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
