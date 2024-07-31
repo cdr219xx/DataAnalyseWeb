@@ -28,16 +28,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Verify Secrets with PowerShell
+      - name: Create .netrc file
         run: |
-          if ($env:HEROKU_API_KEY) { Write-Host "HEROKU_API_KEY is set" } else { Write-Error "HEROKU_API_KEY is not set" }
-          if ($env:HEROKU_EMAIL) { Write-Host "HEROKU_EMAIL is set" } else { Write-Error "HEROKU_EMAIL is not set" }
-          if ($env:SSH_PRIVATE_KEY) { Write-Host "SSH_PRIVATE_KEY is set" } else { Write-Error "SSH_PRIVATE_KEY is not set" }
-        shell: pwsh
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          echo "machine git.heroku.com login ${{ secrets.HEROKU_EMAIL }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
+          chmod 600 ~/.netrc
 
       - name: Deploy to Heroku
         env:
