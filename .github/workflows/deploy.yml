@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -23,27 +23,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Add SSH key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Create .netrc file
-        run: |
-          echo "machine git.heroku.com login ${{ secrets.HEROKU_EMAIL }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
-          chmod 600 ~/.netrc
-
       - name: Set Git user
         run: |
           git config --global user.email "ch.romanek@gmail.com"
           git config --global user.name "cdr219xx"
 
       - name: Deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+        uses: akhileshns/heroku-deploy@v3.13.15
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "dataanalyseweb"
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: false
+          branch: "master"
+          dontuseforce: true
+
+      - name: Configure Git pull strategy
         run: |
-          echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=${{ secrets.HEROKU_EMAIL }} --password-stdin registry.heroku.com
-          git remote add heroku https://git.heroku.com/dataanalyseweb.git
-          git pull heroku master --allow-unrelated-histories
-          git push heroku master --force
+          git config --global pull.rebase false
+          git pull origin master --allow-unrelated-histories
