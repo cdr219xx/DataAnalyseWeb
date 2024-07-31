@@ -40,4 +40,5 @@ jobs:
         run: |
           echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=${{ secrets.HEROKU_EMAIL }} --password-stdin registry.heroku.com
           git remote add heroku https://git.heroku.com/dataanalyseweb.git
-          git push heroku master
+          git pull heroku master
+          git push heroku master --force
